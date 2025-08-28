@@ -1,0 +1,76 @@
+schemas/prestart.schema.json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Vehicle Pre-Start Check and Defect Report",
+  "type": "object",
+  "required": ["generalInfo", "checks", "tyres"],
+  "properties": {
+    "generalInfo": {
+      "type": "object",
+      "required": ["plantNumber", "date", "completedBy"],
+      "properties": {
+        "plantNumber": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "completedBy": { "type": "string" },
+        "registrationDue": { "type": "string", "format": "date", "nullable": true },
+        "cofWofDue": { "type": "string", "format": "date", "nullable": true },
+        "hubKmReading": { "type": "number", "nullable": true },
+        "speedoReading": { "type": "number", "nullable": true }
+      }
+    },
+
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["area", "item", "status"],
+        "properties": {
+          "area": {
+            "type": "string",
+            "enum": ["Engine running", "In cab", "Vehicle exterior"]
+          },
+          "item": { "type": "string" },
+          "status": { "type": "string", "enum": ["Compliant", "Non-compliant", "N/A"] },
+          "note": { "type": "string", "nullable": true },
+          "photoUrl": { "type": "string", "format": "uri", "nullable": true }
+        }
+      }
+    },
+
+    "tyres": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["position"],
+        "properties": {
+          "position": {
+            "type": "string",
+            "enum": [
+              "Front Left","Front Right",
+              "Rear Left Inner","Rear Left Outer",
+              "Rear Right Inner","Rear Right Outer"
+            ]
+          },
+          "treadDepthMm": { "type": "number", "nullable": true },
+          "condition": { "type": "string", "enum": ["OK","Damage","Needs Attention"], "nullable": true },
+          "pressureCheck": { "type": "string", "enum": ["Pass","Fail"], "nullable": true }
+        }
+      }
+    },
+
+    "defects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["natureOfFault"],
+        "properties": {
+          "natureOfFault": { "type": "string" },
+          "workCarriedOutBy": { "type": "string", "nullable": true },
+          "dateWorkCompleted": { "type": "string", "format": "date", "nullable": true },
+          "comments": { "type": "string", "nullable": true }
+        }
+      }
+    }
+  }
+}
